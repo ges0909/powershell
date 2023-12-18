@@ -20,7 +20,8 @@ $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administ
 
 # If so and the current host is a command line, then change to red color 
 # as warning to user that they are operating in an elevated context
-if (($host.Name -match "ConsoleHost") -and ($isAdmin)) {
+if (($host.Name -match "ConsoleHost") -and ($isAdmin))
+{
     $host.UI.RawUI.BackgroundColor = "DarkRed"
     $host.PrivateData.ErrorBackgroundColor = "White"
     $host.PrivateData.ErrorForegroundColor = "DarkRed"
@@ -28,16 +29,34 @@ if (($host.Name -match "ConsoleHost") -and ($isAdmin)) {
 }
 
 # Useful shortcuts for traversing directories
-function cd... { Set-Location ..\.. }
-function cd.... { Set-Location ..\..\.. }
+function cd...
+{
+    Set-Location ..\..
+}
+function cd....
+{
+    Set-Location ..\..\..
+}
 
 # Compute file hashes - useful for checking successful downloads 
-function md5 { Get-FileHash -Algorithm MD5 $args }
-function sha1 { Get-FileHash -Algorithm SHA1 $args }
-function sha256 { Get-FileHash -Algorithm SHA256 $args }
+function md5
+{
+    Get-FileHash -Algorithm MD5 $args
+}
+function sha1
+{
+    Get-FileHash -Algorithm SHA1 $args
+}
+function sha256
+{
+    Get-FileHash -Algorithm SHA256 $args
+}
 
 # Quick shortcut to start notepad
-function n { notepad $args }
+function n
+{
+    notepad $args
+}
 
 # Drive shortcuts
 function HKLM: { Set-Location HKLM: }
@@ -45,15 +64,18 @@ function HKCU: { Set-Location HKCU: }
 function Env: { Set-Location Env: }
 
 # Creates drive shortcut for Work Folders, if current user account is using it
-if (Test-Path "$env:USERPROFILE\Work Folders") {
+if (Test-Path "$env:USERPROFILE\Work Folders")
+{
     New-PSDrive -Name Work -PSProvider FileSystem -Root "$env:USERPROFILE\Work Folders" -Description "Work Folders"
     function Work: { Set-Location Work: }
 }
 
 # Creates drive shortcut for OneDrive, if current user account is using it
-if (Test-Path HKCU:\SOFTWARE\Microsoft\OneDrive) {
+if (Test-Path HKCU:\SOFTWARE\Microsoft\OneDrive)
+{
     $onedrive = Get-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\OneDrive
-    if (($onedrive.UserFolder) -and (Test-Path $onedrive.UserFolder)) {
+    if (($onedrive.UserFolder) -and (Test-Path $onedrive.UserFolder))
+    {
         New-PSDrive -Name OneDrive -PSProvider FileSystem -Root $onedrive.UserFolder -Description "OneDrive"
         function OneDrive: { Set-Location OneDrive: }
     }
@@ -63,26 +85,33 @@ if (Test-Path HKCU:\SOFTWARE\Microsoft\OneDrive) {
 # Set up command prompt and window title. Use UNIX-style convention for identifying 
 # whether user is elevated (root) or not. Window title shows current version of PowerShell
 # and appends [ADMIN] if appropriate for easy taskbar identification
-function prompt { 
-    if ($isAdmin) {
-        "[" + (Get-Location) + "] # " 
+function prompt
+{
+    if ($isAdmin)
+    {
+        "[" + (Get-Location) + "] # "
     }
-    else {
+    else
+    {
         "[" + (Get-Location) + "] $ "
     }
 }
 
 $Host.UI.RawUI.WindowTitle = "PowerShell {0}" -f $PSVersionTable.PSVersion.ToString()
-if ($isAdmin) {
+if ($isAdmin)
+{
     $Host.UI.RawUI.WindowTitle += " [ADMIN]"
 }
 
 # Does the the rough equivalent of dir /s /b. For example, dirs *.png is dir /s /b *.png
-function dirs {
-    if ($args.Count -gt 0) {
+function dirs
+{
+    if ($args.Count -gt 0)
+    {
         Get-ChildItem -Recurse -Include "$args" | Foreach-Object FullName
     }
-    else {
+    else
+    {
         Get-ChildItem -Recurse | Foreach-Object FullName
     }
 }
@@ -90,12 +119,15 @@ function dirs {
 # Simple function to start a new elevated process. If arguments are supplied then 
 # a single command is started with admin rights; if not then a new admin instance
 # of PowerShell is started.
-function admin {
-    if ($args.Count -gt 0) {   
+function admin
+{
+    if ($args.Count -gt 0)
+    {
         $argList = "& '" + $args + "'"
         Start-Process "$psHome\powershell.exe" -Verb runAs -ArgumentList $argList
     }
-    else {
+    else
+    {
         Start-Process "$psHome\powershell.exe" -Verb runAs
     }
 }
@@ -106,11 +138,14 @@ Set-Alias -Name su -Value admin
 Set-Alias -Name sudo -Value admin
 
 # Make it easy to edit this profile once it's installed
-function Edit-Profile {
-    if ($host.Name -match "ise") {
+function Edit-Profile
+{
+    if ($host.Name -match "ise")
+    {
         $psISE.CurrentPowerShellTab.Files.Add($profile.CurrentUserAllHosts)
     }
-    else {
+    else
+    {
         # code $profile.CurrentUserAllHosts
         code $profile
     }
@@ -125,15 +160,18 @@ Remove-Variable principal
 # https://yewtu.be/latest_version?id=LuAipOW8BNQ&itag=22&hmac_key=51258bc4616982d072fa8c17092ccaf2948aca8d
 #
 
-function ll {
-    Get-ChildItem -Path $pwd -File 
+function ll
+{
+    Get-ChildItem -Path $pwd -File
 }
 
-function Get-PubIP {
+function Get-PubIP
+{
     (Invoke-WebRequest http://ifconfig.me/ip).Content
 }
 
-function find-file($name) {
+function find-file($name)
+{
     Get-ChildItem -Recurse -Filter "*${name}*" -ErrorAction SilentlyContinue | ForEach-Object {
         $place_path = $_.directory
         Write-Output "${place_path}\${_}"
@@ -142,15 +180,18 @@ function find-file($name) {
 
 Set-Alias -Name ff -Value find-file
 
-function grep($regex, $dir) {
-    if ( $dir ) {
+function grep($regex, $dir)
+{
+    if ($dir)
+    {
         Get-ChildItem $dir | Select-String $regex
         return
     }
     $input | Select-String $regex
 }
 
-function touch($file) {
+function touch($file)
+{
     "" | Out-File $file -Encoding ASCII
 }
 
