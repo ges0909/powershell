@@ -137,20 +137,6 @@ function admin
 Set-Alias -Name su -Value admin
 Set-Alias -Name sudo -Value admin
 
-# Make it easy to edit this profile once it's installed
-function Edit-Profile
-{
-    if ($host.Name -match "ise")
-    {
-        $psISE.CurrentPowerShellTab.Files.Add($profile.CurrentUserAllHosts)
-    }
-    else
-    {
-        # code $profile.CurrentUserAllHosts
-        code $profile
-    }
-}
-
 # We don't need these any more; they were just temporary variables to get to $isAdmin. 
 # Delete them to prevent cluttering up the user profile. 
 Remove-Variable identity
@@ -160,6 +146,7 @@ Remove-Variable principal
 # https://yewtu.be/latest_version?id=LuAipOW8BNQ&itag=22&hmac_key=51258bc4616982d072fa8c17092ccaf2948aca8d
 #
 
+# ls -l
 function ll
 {
     Get-ChildItem -Path $pwd -File
@@ -170,6 +157,7 @@ function Get-PubIP
     (Invoke-WebRequest http://ifconfig.me/ip).Content
 }
 
+# find file
 function find-file($name)
 {
     Get-ChildItem -Recurse -Filter "*${name}*" -ErrorAction SilentlyContinue | ForEach-Object {
@@ -180,6 +168,7 @@ function find-file($name)
 
 Set-Alias -Name ff -Value find-file
 
+# grep
 function grep($regex, $dir)
 {
     if ($dir)
@@ -190,13 +179,16 @@ function grep($regex, $dir)
     $input | Select-String $regex
 }
 
+# touch
 function touch($file)
 {
     "" | Out-File $file -Encoding ASCII
 }
 
+# Terminal Icons
 # Install-Module -Name Terminal-Icons -Repository PSGallery
 Import-Module -Name Terminal-Icons
 
+# Oh My Posh
 # oh-my-posh init pwsh | Invoke-Expression
 oh-my-posh init pwsh --config  "$HOME/.oh-my-posh.json" | Invoke-Expression
