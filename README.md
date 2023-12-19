@@ -1,11 +1,10 @@
 # Powershell
 
 - [PowerShell Kurs](https://yewtu.be/playlist?list=PL4psuuBzr38450N4fTXNzM9sNZdhBs4sN)
-- [Pretty Powershell](https://yewtu.be/latest_version?id=LuAipOW8BNQ&itag=22&hmac_key=51258bc4616982d072fa8c17092ccaf2948aca8d)
 
-## Profile
+## [Profile](https://yewtu.be/latest_version?id=LuAipOW8BNQ&itag=22&hmac_key=51258bc4616982d072fa8c17092ccaf2948aca8d)
 
-Use `$PROFILE` variable to locate profile file.
+Variable `$PROFILE` enthält Dateipfad zur Profile-Datei.
 
 ```ps
 $PROFILE
@@ -77,7 +76,7 @@ Get-Service wuauserv | Select-Object -Property *
 ```
 
 | MemberType    |                  |
-| ------------- | ---------------- |
+|---------------|------------------|
 | Property      | get,set          |
 | AliasProperty | Name=ServiceName |
 | Method        | void Start()     |
@@ -298,7 +297,7 @@ winget uninstall JanDeDobbeleer.OhMyPosh -s winget # uninstall
 ## Cmdlets
 
 | Cmdlet / Function      | Description                                                                       |
-| ---------------------- | --------------------------------------------------------------------------------- |
+|------------------------|-----------------------------------------------------------------------------------|
 | Add-Type               |                                                                                   |
 | ConvertFrom-Json       |                                                                                   |
 | ConvertFrom-StringData | converts a string that contains one or more key and value pairs into a hash table |
