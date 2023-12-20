@@ -1,10 +1,8 @@
 # Powershell
 
-- [PowerShell Kurs](https://yewtu.be/playlist?list=PL4psuuBzr38450N4fTXNzM9sNZdhBs4sN)
-
 ## [Profile](https://yewtu.be/latest_version?id=LuAipOW8BNQ&itag=22&hmac_key=51258bc4616982d072fa8c17092ccaf2948aca8d)
 
-`$PROFILE` enthält Dateipfad der Profile-Datei.
+`$PROFILE` zeigt auf Profile-Datei
 
 ```ps
 $PROFILE
@@ -17,13 +15,13 @@ C:\Users\gerri\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
 winget install JanDeDobbeleer.OhMyPosh -s winget   # install
 ```
 
-.... und Aufruf zur Profile-Datei hinzufügen:
+... und Aufruf zum Profile hinzufügen
 
 ```ps
 oh-my-posh init pwsh --config  "$HOME/.oh-my-posh.json" | Invoke-Expression
 ```
 
-Zeige Posh-Themes:
+Posh-Themes zeigen
 
 ```ps
 Get-PoshThemes
