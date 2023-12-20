@@ -11,6 +11,18 @@ $PROFILE
 C:\Users\gerri\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
 ```
 
+[Oh My Posh](https://ohmyposh.dev/docs/migrating)
+
+```ps
+winget install JanDeDobbeleer.OhMyPosh -s winget   # install
+```
+
+Profile-Datei:
+
+```ps
+oh-my-posh init pwsh --config  "$HOME/.oh-my-posh.json" | Invoke-Expression
+```
+
 ## [Cmdlets verwenden](https://yewtu.be/watch?v=Xa-xIhZ0bFQ&list=PL4psuuBzr38450N4fTXNzM9sNZdhBs4sN&index=2)
 
 - basieren auf `.NET`-Klassen
@@ -286,13 +298,6 @@ Write-PSFMessage -Level Error -Message "Intermediate result: $($sum)"
 ```
 
 see: [Installing PSFramework](https://www.dataset.com/blog/getting-started-quickly-powershell-logging/)
-
-## [Oh My Posh](https://ohmyposh.dev/docs/migrating)
-
-```ps
-winget install JanDeDobbeleer.OhMyPosh -s winget   # install
-winget uninstall JanDeDobbeleer.OhMyPosh -s winget # uninstall
-```
 
 ## Cmdlets
 

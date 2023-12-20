@@ -1,3 +1,6 @@
+<#
+Top 10 PowerShell Commands for Beginners | Realistic Examples with Explanations!
+#>
 
 # 1. Get-Content
 
@@ -26,7 +29,7 @@ $hosts | ForEach-Object {
 
 $hosts | ForEach-Object {
     $status = Test-Connection -ComputerName $_ -Count 1 | Select-Object Status
-    Write-Host "Testing Host $($_): $($status.Status)"
+    Write-Host "$(Get-Date) Testing Host $($_): $($status.Status)"
 }
 
 # 5. ConvertTo-Json
@@ -45,3 +48,18 @@ Get-Date
 
 (Get-Date).DayOfWeek
 
+# 7. Write-Host
+
+Write-Host -BackgroundColor DarkGray -ForegroundColor Red "Write anything colorized!"
+
+# 8. Get-Command
+
+Get-Command *
+
+Get-Command *write*
+
+Get-Command *disk*
+
+# 9. Get-Help
+
+Get-Help Get-Process -Online
