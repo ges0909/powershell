@@ -191,4 +191,4 @@ Import-Module -Name Terminal-Icons
 
 # Oh My Posh
 # oh-my-posh init pwsh | Invoke-Expression
-oh-my-posh init pwsh --config  "$HOME/.oh-my-posh.json" | Invoke-Expression
+oh-my-posh init pwsh --config  "$HOME/oh-my-posh.json" | Invoke-Expression

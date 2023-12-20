@@ -4,23 +4,29 @@
 
 ## [Profile](https://yewtu.be/latest_version?id=LuAipOW8BNQ&itag=22&hmac_key=51258bc4616982d072fa8c17092ccaf2948aca8d)
 
-Variable `$PROFILE` enthält Dateipfad zur Profile-Datei.
+`$PROFILE` enthält Dateipfad der Profile-Datei.
 
 ```ps
 $PROFILE
 C:\Users\gerri\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
 ```
 
-[Oh My Posh](https://ohmyposh.dev/docs/migrating)
+[Oh My Posh](https://ohmyposh.dev/docs/migrating) installieren ...
 
 ```ps
 winget install JanDeDobbeleer.OhMyPosh -s winget   # install
 ```
 
-Profile-Datei:
+.... und Aufruf zur Profile-Datei hinzufügen:
 
 ```ps
 oh-my-posh init pwsh --config  "$HOME/.oh-my-posh.json" | Invoke-Expression
+```
+
+Zeige Posh-Themes:
+
+```ps
+Get-PoshThemes
 ```
 
 ## [Cmdlets verwenden](https://yewtu.be/watch?v=Xa-xIhZ0bFQ&list=PL4psuuBzr38450N4fTXNzM9sNZdhBs4sN&index=2)
