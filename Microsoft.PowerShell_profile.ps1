@@ -1,5 +1,9 @@
 ### PowerShell template profile 
 
+# Set-PSReadLineOption -HistorySearchCursorMovesToEnd
+Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
+Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
+
 # ls -l
 function ll
 {
