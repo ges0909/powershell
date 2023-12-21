@@ -12,7 +12,7 @@ C:\Users\gerri\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
 [Oh My Posh](https://ohmyposh.dev/docs/migrating) installieren ...
 
 ```ps
-winget install JanDeDobbeleer.OhMyPosh -s winget   # install
+winget install JanDeDobbeleer.OhMyPosh -s winget
 ```
 
 ... und Aufruf zum Profile hinzufügen
@@ -21,22 +21,22 @@ winget install JanDeDobbeleer.OhMyPosh -s winget   # install
 oh-my-posh init pwsh --config  "$HOME/.oh-my-posh.json" | Invoke-Expression
 ```
 
-Posh-Themes zeigen
+Posh themes zeigen
 
 ```ps
 Get-PoshThemes
 ```
 
-## [Cmdlets verwenden](https://yewtu.be/watch?v=Xa-xIhZ0bFQ&list=PL4psuuBzr38450N4fTXNzM9sNZdhBs4sN&index=2)
+## Cmdlet
 
 - basieren auf `.NET`-Klassen
 - Ein-/Ausgabe besteht aus Objekten, kein Text
 - folgen dem Schema \<Verb\>-\<Noun\>
 - Groß-/Kleinschreibung ohne Bedeutung
 - Parametertypen
-    - Name + Wert
-    - positionsorientiert
-    - Schalter
+  - Name + Wert
+  - positionsorientiert
+  - Schalter
 
 ```ps
 Get-Process
@@ -46,28 +46,7 @@ Get-Process -Name *s*
 Get-Process -Name msedge -FileVersionInfo
 ```
 
-## [Die PowerShell Hilfe](https://yewtu.be/watch?v=nls1STymEYo&list=PL4psuuBzr38450N4fTXNzM9sNZdhBs4sN&index=3)
-
-```ps
-Get-Help
-Get-Help Get-Process
-Get-Help Get-Process -Full
-Get-Help Get-Process -Online # Online-Hilfe im Browser
-```
-
-```ps
-Get-Help New-ScriptFileInfo
-Get-Help New-ScriptFileInfo -Full
-Get-Help New-ScriptFileInfo -Online
-```
-
-Hilfe aktualisieren (als Admin)
-
-```ps
-Update-Help
-```
-
-## [PowerShell PIPE](https://yewtu.be/watch?v=3NQoZKq3_yI&list=PL4psuuBzr38450N4fTXNzM9sNZdhBs4sN&index=4)
+## Pipes
 
 Übergabe von Objekten zwischen Cmdlets
 
@@ -84,7 +63,7 @@ Get-Process -name msedge # schneller
 Get-Process | Where-Object -Property Name -EQ -Value msegde # langsamer
 ```
 
-## [Objekte in PowerShell](https://yewtu.be/watch?v=e5NrsnHC2W0&list=PL4psuuBzr38450N4fTXNzM9sNZdhBs4sN&index=5)
+## Objekte
 
 ```ps
 Get-Service | Get-Member
@@ -92,7 +71,7 @@ Get-Service wuauserv | Select-Object -Property *
 ```
 
 | MemberType    |                  |
-|---------------|------------------|
+| ------------- | ---------------- |
 | Property      | get,set          |
 | AliasProperty | Name=ServiceName |
 | Method        | void Start()     |
@@ -117,7 +96,7 @@ Stop-Service wuauserv
 Restart-Service wuauserv
 ```
 
-## [Mit der PowerShell navigieren](https://yewtu.be/watch?v=rQ-R2UAN-r4&list=PL4psuuBzr38450N4fTXNzM9sNZdhBs4sN&index=6)
+## Navigieren
 
 Dateisystem
 
@@ -135,7 +114,7 @@ cd HKCU:\
 dir
 ```
 
-## [Variablen in PowerShell verwenden](https://yewtu.be/watch?v=I8phsCSui6Y&list=PL4psuuBzr38450N4fTXNzM9sNZdhBs4sN&index=7)
+## Variablen
 
 Variables are represented by text strings that begin with a `$`, such as  `$my_var`.
 
@@ -202,6 +181,7 @@ $test | Get-Member
 [int]$test = Read-Host "Bitte gib eine Zahl ein" # erzwinge Eingabe von Integer
 Bitte gib eine Zahl ein: 123
 ```
+
 ### Arrays
 
 ```pwsh
@@ -229,19 +209,24 @@ $h.Key3 = "9"
 $h.Remove("Key3")
 ```
 
-## New-ScriptFileInfo
+## If statement
 
 ```ps
-New-ScriptFileInfo -Version 1.0 -Author 'Sebastian.Hartte@deutschebahn.com (Gerrit.Schrader@deutschebahn.com)' -CompanyName 'DB Netz AG' -Description 'Skript zum Starten des iSBPN-Launchers' startup.ps1
+$var = 9
+if ($var -eq 9) {
+   Write-Host "Values are equal"
+}
 ```
 
-## Execution Policy
+## Foreach statement
 
-```pwsh
-Get-ExecutionPolicy
-Get-ExecutionPolicy -List
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass # set
-Set-ExecutionPolicy -Scope CurrentUser Unrestricted
+```ps
+$files = Get-ChildItem -Path $HOME/Projekte
+foreach ($file in $files) {
+   if ($file.Length -gt 0kb) {
+      Write-Host $file
+   }
+}
 ```
 
 ## ErrorAction in PowerShell
@@ -276,6 +261,113 @@ Uninstall-Module -Name ActiveDirectoryTools
 Add-Type -AssemblyName System.Windows.Forms
 ```
 
+## Get-Help
+
+```ps
+Get-Help
+Get-Help Get-Process
+Get-Help Get-Process -Full
+Get-Help Get-Process -Online # Online-Hilfe im Browser
+```
+
+Hilfe aktualisieren (als Admin)
+
+```ps
+Update-Help
+```
+
+## Get-Command
+
+```ps
+Get-Command
+Get-Command -Name *Write-*
+```
+
+## Get-Member
+
+```ps
+Get-Command | Get-Member
+```
+
+```ps
+Name                MemberType     Definition
+----                ----------     ----------
+Equals              Method         bool Equals(System.Object obj)
+GetHashCode         Method         int GetHashCode()
+GetType             Method         type GetType()
+ResolveParameter    Method         System.Management.Automation.ParameterMetadata ResolveParameter(string name)
+ToString            Method         string ToString()
+CommandType         Property       System.Management.Automation.CommandTypes CommandType {get;}
+DefaultParameterSet Property       string DefaultParameterSet {get;}
+Definition          Property       string Definition {get;}
+HelpFile            Property       string HelpFile {get;}
+ImplementingType    Property       type ImplementingType {get;}
+Module              Property       psmoduleinfo Module {get;}
+ModuleName          Property       string ModuleName {get;}
+Name                Property       string Name {get;}
+Noun                Property       string Noun {get;}
+Options             Property       System.Management.Automation.ScopedItemOptions Options {get;set;}
+OutputType          Property       System.Collections.ObjectModel.ReadOnlyCollection[System.Management.Automation.PSTypeName] OutputType {get;}
+Parameters          Property       System.Collections.Generic.Dictionary[string,System.Management.Automation.ParameterMetadata] Parameters {get;}
+ParameterSets       Property       System.Collections.ObjectModel.ReadOnlyCollection[System.Management.Automation.CommandParameterSetInfo] ParameterSets {get;}
+PSSnapIn            Property       System.Management.Automation.PSSnapInInfo PSSnapIn {get;}
+RemotingCapability  Property       System.Management.Automation.RemotingCapability RemotingCapability {get;}
+Source              Property       string Source {get;}
+Verb                Property       string Verb {get;}
+Version             Property       version Version {get;}
+Visibility          Property       System.Management.Automation.SessionStateEntryVisibility Visibility {get;set;}
+DLL                 ScriptProperty System.Object DLL {get=$this.ImplementingType.Assembly.Location;}
+HelpUri             ScriptProperty System.Object HelpUri {get=$oldProgressPreference = $ProgressPreference…
+```
+
+## Get-Date
+
+```ps
+Get-Date
+Get-Date -Format "dd.MM.yyyy"
+```
+
+## Out-File
+
+## ConvertTo-Html
+
+```ps
+Get-Process | ConvertTo-Html | Out-File Process.html
+```
+
+## Get-ChildItem
+
+## Out-GridView
+
+Sends output to a grid view GUI window.
+
+```ps
+Get-Process | Out-GridView
+```
+
+## Invoke-Item
+
+Opens item in application dependening of default file association.
+
+```ps
+Invoke-Item ./Process.html
+```
+
+## New-ScriptFileInfo
+
+```ps
+New-ScriptFileInfo -Version 1.0 -Author 'Sebastian.Hartte@deutschebahn.com (Gerrit.Schrader@deutschebahn.com)' -CompanyName 'DB Netz AG' -Description 'Skript zum Starten des iSBPN-Launchers' startup.ps1
+```
+
+## Execution Policy
+
+```pwsh
+Get-ExecutionPolicy
+Get-ExecutionPolicy -List
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass # set
+Set-ExecutionPolicy -Scope CurrentUser Unrestricted
+```
+
 ## Logging
 
 Install `PSFramework`:
@@ -306,7 +398,7 @@ see: [Installing PSFramework](https://www.dataset.com/blog/getting-started-quick
 ## Cmdlets
 
 | Cmdlet / Function      | Description                                                                       |
-|------------------------|-----------------------------------------------------------------------------------|
+| ---------------------- | --------------------------------------------------------------------------------- |
 | Add-Type               |                                                                                   |
 | ConvertFrom-Json       |                                                                                   |
 | ConvertFrom-StringData | converts a string that contains one or more key and value pairs into a hash table |
