@@ -1,4 +1,4 @@
-### PowerShell template profile 
+### PowerShell profile
 
 # Set-PSReadLineOption -HistorySearchCursorMovesToEnd
 Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
@@ -26,8 +26,7 @@ function llr
 function find-file($name)
 {
     Get-ChildItem -Recurse -Filter "*${name}*" -ErrorAction SilentlyContinue | ForEach-Object {
-        $place_path = $_.directory
-        Write-Output "${place_path}\${_}"
+        Write-Output $_
     }
 }
 
@@ -49,6 +48,13 @@ function touch($file)
 {
     "" | Out-File $file -Encoding ASCII
 }
+
+# set location to project dir
+function  set-location-project-dir{
+    Set-Location $HOME/Projekte
+}
+
+Set-Alias -Name p -Value set-location-project-dir
 
 # Terminal Icons
 # Install-Module -Name Terminal-Icons -Repository PSGallery
