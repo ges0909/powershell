@@ -26,7 +26,7 @@ function llr
 function find-file($name)
 {
     Get-ChildItem -Recurse -Filter "*${name}*" -ErrorAction SilentlyContinue | ForEach-Object {
-        Write-Output $_
+        Write-Output "${_}"
     }
 }
 
@@ -50,7 +50,8 @@ function touch($file)
 }
 
 # set location to project dir
-function  set-location-project-dir{
+function  set-location-project-dir
+{
     Set-Location $HOME/Projekte
 }
 
