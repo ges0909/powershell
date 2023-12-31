@@ -50,7 +50,7 @@ function touch($file)
 }
 
 # set location to project dir
-function  set-location-project-dir
+function set-location-project-dir
 {
     Set-Location $HOME/Projekte
 }

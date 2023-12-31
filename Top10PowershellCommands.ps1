@@ -54,11 +54,16 @@ Write-Host -BackgroundColor DarkGray -ForegroundColor Red "Write anything colori
 
 # 8. Get-Command
 
+# List cmdlets of type 'Cmdlet' and 'Function'.
+Get-Command
+
 Get-Command *
 
+# List cmdlets containg '*write*' in name.
 Get-Command *write*
 
-Get-Command *disk*
+# How many cmdlets are installed?
+Get-Command -CommandType Cmdlet | Measure-Object
 
 # 9. Get-Help
 
