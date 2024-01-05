@@ -1,8 +1,8 @@
 ### PowerShell profile
 
-$od  = $env:OneDrive
-$odb = $env:OneDriveBusiness
-$odc = $env:OneDriveConsumer
+# $od  = $env:OneDrive
+# $odb = $env:OneDriveBusiness
+# $odc = $env:OneDriveConsumer
 
 # Set-PSReadLineOption -HistorySearchCursorMovesToEnd
 Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
@@ -27,14 +27,14 @@ function llr
 }
 
 # find file
-function find-file($name)
+function Find-File($name)
 {
     Get-ChildItem -Recurse -Filter "*${name}*" -ErrorAction SilentlyContinue | ForEach-Object {
         Write-Output "${_}"
     }
 }
 
-Set-Alias -Name ff -Value find-file
+Set-Alias -Name ff -Value Find-File
 
 # grep
 function grep($regex, $dir)
@@ -54,12 +54,37 @@ function touch($file)
 }
 
 # set location to project dir
-function set-location-project-dir
+function Set-LocationProjectDir
 {
     Set-Location $HOME/Projekte
 }
 
-Set-Alias -Name p -Value set-location-project-dir
+Set-Alias -Name p -Value Set-LocationProjectDir
+
+function Set-LocalTestDatabase
+{
+    $ServerDir = "$HOME/Projekte/server"
+    $ProtocolDir = "$HOME/Projekte/betriebliches-protokoll"
+    $Projects = @($ServerDir, $ProtocolDir)
+
+    Set-Location $ServerDir
+    docker compose down
+    $ImageId = docker images --quiet "gvenzl/oracle-xe"
+    docker image rm $ImageId
+    docker compose up oracle -d
+    Start-Sleep -Seconds 10
+    ./gradlew createSchema
+
+    foreach ($project in $Projects)
+    {
+        $name = Split-Path "$project" -Leaf
+        Write-Host ">> migrate $($name.ToUpper())"
+        Set-Location $project
+        ./gradlew flywayMigrate
+    }
+}
+
+Set-Alias -Name db -Value Set-LocalTestDatabase
 
 # Terminal Icons
 # Install-Module -Name Terminal-Icons -Repository PSGallery
