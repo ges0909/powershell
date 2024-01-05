@@ -63,6 +63,8 @@ Set-Alias -Name p -Value Set-LocationProjectDir
 
 function Set-LocalTestDatabase
 {
+    $cwd = Get-Location
+
     $ServerDir = "$HOME/Projekte/server"
     $ProtocolDir = "$HOME/Projekte/betriebliches-protokoll"
     $Projects = @($ServerDir, $ProtocolDir)
@@ -82,6 +84,8 @@ function Set-LocalTestDatabase
         Set-Location $project
         ./gradlew flywayMigrate
     }
+
+    Set-Location $cwd
 }
 
 Set-Alias -Name db -Value Set-LocalTestDatabase
