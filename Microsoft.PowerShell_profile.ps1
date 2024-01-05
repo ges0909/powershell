@@ -1,6 +1,8 @@
 ### PowerShell profile
 
-$OneDrive = Get-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\OneDrive\Accounts\Business1" | Select-Object -ExpandProperty "UserFolder"
+$od  = $env:OneDrive
+$odb = $env:OneDriveBusiness
+$odc = $env:OneDriveConsumer
 
 # Set-PSReadLineOption -HistorySearchCursorMovesToEnd
 Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
