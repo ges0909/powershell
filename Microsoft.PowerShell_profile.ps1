@@ -1,9 +1,5 @@
 ### PowerShell profile
 
-# $od  = $env:OneDrive
-# $odb = $env:OneDriveBusiness
-# $odc = $env:OneDriveConsumer
-
 # Set-PSReadLineOption -HistorySearchCursorMovesToEnd
 Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
@@ -26,6 +22,22 @@ function llr
     }
 }
 
+# OneDrive
+function od
+{
+    Set-Location $env:OneDrive
+}
+
+function odb
+{
+    Set-Location $env:OneDriveBusiness
+}
+
+function odc
+{
+    Set-Location $env:OneDriveConsumer
+}
+
 # find file
 function Find-File($name)
 {
@@ -33,8 +45,6 @@ function Find-File($name)
         Write-Output "${_}"
     }
 }
-
-Set-Alias -Name ff -Value Find-File
 
 # grep
 function grep($regex, $dir)
@@ -59,10 +69,16 @@ function Set-LocationProjectDir
     Set-Location $HOME/Projekte
 }
 
-Set-Alias -Name p -Value Set-LocationProjectDir
+# set location to QCAD config dir
+function Set-LocationQcadConfigDir
+{
+    Set-Location $env:AppData/QCAD
+}
 
 function Set-LocalTestDatabase
 {
+    $ErrorActionPreference = "Stop"
+
     $cwd = Get-Location
 
     $ServerDir = "$HOME/Projekte/server"
@@ -88,6 +104,10 @@ function Set-LocalTestDatabase
     Set-Location $cwd
 }
 
+# Aliases
+Set-Alias -Name ff -Value Find-File
+Set-Alias -Name p  -Value Set-LocationProjectDir
+Set-Alias -Name q  -Value Set-LocationQcadConfigDir
 Set-Alias -Name db -Value Set-LocalTestDatabase
 
 # Terminal Icons
