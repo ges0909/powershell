@@ -81,26 +81,30 @@ function Set-LocalTestDatabase
 
     $cwd = Get-Location
 
-    $ServerDir = "$HOME/Projekte/server"
-    $TagesmappeDir = "$HOME/Projekte/tagesmappe"
-    $ProtocolServerDir = "$HOME/Projekte/betriebliches-protokoll"
-    $Projects = @($ServerDir, $TagesmappeDir, $ProtocolServerDir)
-
-    Set-Location $ServerDir
+    $Dir = "$HOME/Projekte/server"
+    Set-Location $Dir
     docker compose down
     $ImageId = docker images --quiet "gvenzl/oracle-xe"
     docker image rm $ImageId
     docker compose up oracle -d
     Start-Sleep -Seconds 10
+    $Name = Split-Path "$Dir" -Leaf
+    Write-Host ">> migrate $($name.ToUpper())"
     ./gradlew createSchema
+    ./gradlew flywayMigrate
 
-    foreach ($project in $Projects)
-    {
-        $name = Split-Path "$project" -Leaf
-        Write-Host ">> migrate $($name.ToUpper())"
-        Set-Location $project
-        ./gradlew flywayMigrate
-    }
+    $Dir = "$HOME/Projekte/tagesmappe"
+    $Name = Split-Path "$Dir" -Leaf
+    Write-Host ">> migrate $($name.ToUpper())"
+    Set-Location $Dir
+    ./gradlew createSchema
+    ./gradlew flywayMigrate
+
+    $Dir = "$HOME/Projekte/betriebliches-protokoll"
+    $Name = Split-Path "$Dir" -Leaf
+    Write-Host ">> migrate $($name.ToUpper())"
+    Set-Location $Dir
+    ./gradlew flywayMigrate
 
     Set-Location $cwd
 }
