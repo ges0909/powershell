@@ -82,8 +82,9 @@ function Set-LocalTestDatabase
     $cwd = Get-Location
 
     $ServerDir = "$HOME/Projekte/server"
-    $ProtocolDir = "$HOME/Projekte/betriebliches-protokoll"
-    $Projects = @($ServerDir, $ProtocolDir)
+    $TagesmappeDir = "$HOME/Projekte/tagesmappe"
+    $ProtocolServerDir = "$HOME/Projekte/betriebliches-protokoll"
+    $Projects = @($ServerDir, $TagesmappeDir, $ProtocolServerDir)
 
     Set-Location $ServerDir
     docker compose down
