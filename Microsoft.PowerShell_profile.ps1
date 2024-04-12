@@ -83,26 +83,17 @@ function Set-LocalTestDatabase
 
     $Dir = "$HOME/Projekte/server"
     Set-Location $Dir
-    docker compose down
-    $ImageId = docker images --quiet "gvenzl/oracle-xe"
-    docker image rm $ImageId
-    docker compose up oracle -d
-    Start-Sleep -Seconds 10
-    $Name = Split-Path "$Dir" -Leaf
-    Write-Host ">> migrate $($name.ToUpper())"
     ./gradlew createSchema
     ./gradlew flywayMigrate
+    ./gradlew isbpnserver:importStammdaten
+    ./gradlew bereichsimport:bootRun --args='bereichsimport --spring.profiles.active=import'
 
     $Dir = "$HOME/Projekte/tagesmappe"
-    $Name = Split-Path "$Dir" -Leaf
-    Write-Host ">> migrate $($name.ToUpper())"
     Set-Location $Dir
     ./gradlew createSchema
     ./gradlew flywayMigrate
 
     $Dir = "$HOME/Projekte/betriebliches-protokoll"
-    $Name = Split-Path "$Dir" -Leaf
-    Write-Host ">> migrate $($name.ToUpper())"
     Set-Location $Dir
     ./gradlew flywayMigrate
 
@@ -122,3 +113,15 @@ Import-Module -Name Terminal-Icons
 # Oh My Posh
 # oh-my-posh init pwsh | Invoke-Expression
 oh-my-posh init pwsh --config  "$HOME/oh-my-posh.json" | Invoke-Expression
+
+# Generate a Global Unique Identifier
+function Get-GUID
+{
+    [guid]::NewGuid()
+}
+
+Set-Alias uid Get-GUID
+
+# Winfetch
+# Install-Script -Name pwshfetch-test-1
+Set-Alias winfetch pwshfetch-test-1
