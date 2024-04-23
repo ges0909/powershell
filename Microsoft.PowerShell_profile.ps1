@@ -4,7 +4,9 @@
 Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 
+#
 # ls -l
+#
 function ll
 {
     Get-ChildItem -Path $pwd
@@ -22,7 +24,9 @@ function llr
     }
 }
 
+#
 # OneDrive
+#
 function od
 {
     Set-Location $env:OneDrive
@@ -38,7 +42,9 @@ function odc
     Set-Location $env:OneDriveConsumer
 }
 
+#
 # find file
+#
 function Find-File($name)
 {
     Get-ChildItem -Recurse -Filter "*${name}*" -ErrorAction SilentlyContinue | ForEach-Object {
@@ -46,7 +52,9 @@ function Find-File($name)
     }
 }
 
+#
 # grep
+#
 function grep($regex, $dir)
 {
     if ($dir)
@@ -57,24 +65,33 @@ function grep($regex, $dir)
     $input | Select-String $regex
 }
 
+#
 # touch
+#
 function touch($file)
 {
     "" | Out-File $file -Encoding ASCII
 }
 
+#
 # set location to project dir
+#
 function Set-LocationProjectDir
 {
     Set-Location $HOME/Projekte
 }
 
+#
 # set location to QCAD config dir
+#
 function Set-LocationQcadConfigDir
 {
     Set-Location $env:AppData/QCAD
 }
 
+#
+# local database setup
+#
 function Set-LocalTestDatabase
 {
     $ErrorActionPreference = "Stop"
@@ -85,8 +102,8 @@ function Set-LocalTestDatabase
     Set-Location $Dir
     ./gradlew createSchema
     ./gradlew flywayMigrate
-    ./gradlew isbpnserver:importStammdaten
     ./gradlew bereichsimport:bootRun --args='bereichsimport --spring.profiles.active=import'
+    ./gradlew isbpnserver:importStammdaten
 
     $Dir = "$HOME/Projekte/tagesmappe"
     Set-Location $Dir
@@ -100,28 +117,37 @@ function Set-LocalTestDatabase
     Set-Location $cwd
 }
 
-# Aliases
-Set-Alias -Name ff -Value Find-File
-Set-Alias -Name p  -Value Set-LocationProjectDir
-Set-Alias -Name q  -Value Set-LocationQcadConfigDir
-Set-Alias -Name db -Value Set-LocalTestDatabase
-
-# Terminal Icons
-# Install-Module -Name Terminal-Icons -Repository PSGallery
-Import-Module -Name Terminal-Icons
-
-# Oh My Posh
-# oh-my-posh init pwsh | Invoke-Expression
-oh-my-posh init pwsh --config  "$HOME/oh-my-posh.json" | Invoke-Expression
-
+#
 # Generate a Global Unique Identifier
+#
 function Get-GUID
 {
     [guid]::NewGuid()
 }
 
-Set-Alias uid Get-GUID
+#
+# Aliases
+#
+Set-Alias -Name ff  -Value Find-File
+Set-Alias -Name p   -Value Set-LocationProjectDir
+Set-Alias -Name q   -Value Set-LocationQcadConfigDir
+Set-Alias -Name db  -Value Set-LocalTestDatabase
+Set-Alias -Name uid -Value Get-GUID
 
+#
+# Terminal Icons
+#
+# Install-Module -Name Terminal-Icons -Repository PSGallery
+Import-Module -Name Terminal-Icons
+
+#
+# Oh My Posh
+#
+# oh-my-posh init pwsh | Invoke-Expression
+oh-my-posh init pwsh --config  "$HOME/.oh-my-posh.json" | Invoke-Expression
+
+#
 # Winfetch
+#
 # Install-Script -Name pwshfetch-test-1
 Set-Alias winfetch pwshfetch-test-1
