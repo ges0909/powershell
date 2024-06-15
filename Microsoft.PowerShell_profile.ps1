@@ -7,19 +7,15 @@ Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 #
 # ls -l
 #
-function ll
-{
+function ll {
     Get-ChildItem -Path $pwd
 }
 
-function llr
-{
-    if ($args.Count -gt 0)
-    {
+function llr {
+    if ($args.Count -gt 0) {
         Get-ChildItem -Recurse -Include "$args" | Foreach-Object FullName
     }
-    else
-    {
+    else {
         Get-ChildItem -Recurse | Foreach-Object FullName
     }
 }
@@ -27,26 +23,22 @@ function llr
 #
 # OneDrive
 #
-function od
-{
+function od {
     Set-Location $env:OneDrive
 }
 
-function odb
-{
+function odb {
     Set-Location $env:OneDriveBusiness
 }
 
-function odc
-{
+function odc {
     Set-Location $env:OneDriveConsumer
 }
 
 #
 # find file
 #
-function Find-File($name)
-{
+function Find-File($name) {
     Get-ChildItem -Recurse -Filter "*${name}*" -ErrorAction SilentlyContinue | ForEach-Object {
         Write-Output "${_}"
     }
@@ -55,10 +47,8 @@ function Find-File($name)
 #
 # grep
 #
-function grep($regex, $dir)
-{
-    if ($dir)
-    {
+function grep($regex, $dir) {
+    if ($dir) {
         Get-ChildItem $dir | Select-String $regex
         return
     }
@@ -68,32 +58,28 @@ function grep($regex, $dir)
 #
 # touch
 #
-function touch($file)
-{
+function touch($file) {
     "" | Out-File $file -Encoding ASCII
 }
 
 #
 # set location to project dir
 #
-function Set-LocationProjectDir
-{
+function Set-LocationProjectDir {
     Set-Location $HOME/Projekte
 }
 
 #
 # set location to QCAD config dir
 #
-function Set-LocationQcadConfigDir
-{
+function Set-LocationQcadConfigDir {
     Set-Location $env:AppData/QCAD
 }
 
 #
 # local database setup
 #
-function Set-LocalTestDatabase
-{
+function Set-LocalTestDatabase {
     $ErrorActionPreference = "Stop"
 
     $cwd = Get-Location
@@ -102,8 +88,6 @@ function Set-LocalTestDatabase
     Set-Location $Dir
     ./gradlew createSchema
     ./gradlew flywayMigrate
-    ./gradlew bereichsimport:bootRun --args='bereichsimport --spring.profiles.active=import'
-    ./gradlew isbpnserver:importStammdaten
 
     $Dir = "$HOME/Projekte/tagesmappe"
     Set-Location $Dir
@@ -114,14 +98,18 @@ function Set-LocalTestDatabase
     Set-Location $Dir
     ./gradlew flywayMigrate
 
+    $Dir = "$HOME/Projekte/server"
+    Set-Location $Dir
+    ./gradlew bereichsimport:bootRun --args='bereichsimport --spring.profiles.active=import'
+    ./gradlew isbpnserver:importStammdaten
+
     Set-Location $cwd
 }
 
 #
 # Generate a Global Unique Identifier
 #
-function Get-GUID
-{
+function Get-GUID {
     [guid]::NewGuid()
 }
 
