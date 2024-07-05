@@ -96,6 +96,7 @@ function Set-LocalTestDatabase {
 
     $Dir = "$HOME/Projekte/betriebliches-protokoll"
     Set-Location $Dir
+    ./gradlew createSchema
     ./gradlew flywayMigrate
 
     $Dir = "$HOME/Projekte/server"
