@@ -88,6 +88,8 @@ function Set-LocalTestDatabase {
     Set-Location $Dir
     ./gradlew createSchema
     ./gradlew flywayMigrate
+    ./gradlew bereichsimport:bootRun --args='bereichsimport --spring.profiles.active=import'
+    ./gradlew isbpnserver:importStammdaten
 
     $Dir = "$HOME/Projekte/tagesmappe"
     Set-Location $Dir
@@ -98,11 +100,6 @@ function Set-LocalTestDatabase {
     Set-Location $Dir
     ./gradlew createSchema
     ./gradlew flywayMigrate
-
-    $Dir = "$HOME/Projekte/server"
-    Set-Location $Dir
-    ./gradlew bereichsimport:bootRun --args='bereichsimport --spring.profiles.active=import'
-    ./gradlew isbpnserver:importStammdaten
 
     Set-Location $cwd
 }
