@@ -1,0 +1,151 @@
+= Unit-Tests
+
+Unit-Tests für Powershell-Module werden mit dem Framework https://github.com/pester/Pester[Pester] geschrieben.
+
+Zunächst muss auf dem lokalen Rechner einmalig das Pester-Modul aktualisiert werden.
+
+[source,pwsh]
+Install-Module -Name Pester -Force
+
+Danach können die Unit-Tests mit dem Kommando
+
+[source,pwsh]
+----
+cd script
+Invoke-Pester -Output Detailed
+----
+
+ausgeführt werden.
+
+Im Ergebnis sollte etwa folgende Ausgabe erscheinen.
+
+[source,pwsh]
+----
+$ Invoke-Pester -Output Detailed
+Pester v5.6.1
+
+Starting discovery in 1 files.
+Discovery found 78 tests in 301ms.
+Running tests.
+
+Running tests from 'C:\Users\GerritSchrader\Projekte\isbpn-launcher\start-script\sbpStart.Tests.ps1'
+Describing Ergebnis 'less', 'greater' und 'equal' der 'Compare'-Funktion als Grundlage für Sortierung
+ Context Einstellige Versionsnummnern
+   [+] 23 < 24 123ms (85ms|38ms)
+   [+] 24 > 23 18ms (17ms|1ms)
+   [+] 23 = 23 11ms (10ms|0ms)
+ Context Zweistellige Versionsnummnern
+   [+] 24.0 < 24.1 10ms (8ms|2ms)
+   [+] 24.1 > 24.0 2ms (2ms|0ms)
+   [+] 24.0 = 24.0 2ms (2ms|0ms)
+ Context Dreistellige Versionsnummnern
+   [+] 24.1.1 < 24.1.2 10ms (9ms|1ms)
+   [+] 24.1.2 > 24.1.1 3ms (2ms|0ms)
+   [+] 24.1.1 = 24.1.1 3ms (2ms|0ms)
+ Context Vierstellige Versionsnummnern
+   [+] 24.1.3.0 < 24.1.6.1 12ms (10ms|1ms)
+   [+] 24.1.6.1 > 24.1.3.0 3ms (2ms|0ms)
+   [+] 24.1.3.0 = 24.1.3.0 2ms (2ms|0ms)
+ Context Verschieden lange Versionsnummnern
+   [+] 24.1.3 < 24.1.6.1 33ms (30ms|3ms)
+   [+] 24.1.6.1 > 24.1.3 23ms (23ms|0ms)
+   [+] 24.1.6 = 24.1.6.0 17ms (17ms|0ms)
+ Context Spezialfälle
+   [+] 24.1.03 = 24.1.3 14ms (13ms|1ms)
+   [+] 024.1.3 = 24.1.3 21ms (21ms|0ms)
+ Describing Sortierung Launcher-Verzeichnisse: Höchste Version zuerst, niedrigste Version zuletzt
+  Context nur 3-stellige Launcherversionen
+    [+] [10.0.3, 10.0.1, 10.0.2] -> [10.0.3, 10.0.2, 10.0.1] 45ms (43ms|2ms)
+  Context nur 4-stellige Launcherversionen
+    [+] [10.0.1.1, 10.0.2.1, 10.0.3.1] -> [10.0.3.1, 10.0.2.1, 10.0.1.1] 24ms (23ms|1ms)
+  Context 3- und 4-stellige Launcherversionen
+    [+] [0.0.1, 0.1.0.1 10.1.0, 1.2.3.4] -> [1.2.3.4, 0.1.0.1, 0.1.0, 0.0.1] 23ms (22ms|1ms)
+ Describing Match für jede Launcherversion, wenn leere Liste für Serverversionen
+Version 1.2.3 ist unterstützt, weil SupportedVersions leer ist
+   [+] 3-stellige Launcherversion 13ms (12ms|1ms)
+Version 1.2.3.4 ist unterstützt, weil SupportedVersions leer ist
+   [+] 4-stellige Launcherversion 9ms (9ms|0ms)
+ Describing Match für Launcherversion, wenn passendes Client-Release vom Server
+  Die Version 1.2.3.4 ist spezifischer als 1.2.3
+   [+] KEIN Match: 3-stellige Launcherversion mit 4-stelliger Serverversion (Version ist spezifischer) 10ms (9ms|1ms)
+   [+] 3-stellige Launcherversion mit 3-stelliger Serverversion 8ms (8ms|0ms)
+   [+] 3-stellige Launcherversion mit 2-stelliger Serverversion 7ms (7ms|0ms)
+   [+] 3-stellige Launcherversion mit 1-stelliger Serverversion 8ms (8ms|0ms)
+   [+] 4-stellige Launcherversion mit 4-stelliger Serverversion 7ms (7ms|0ms)
+   [+] 4-stellige Launcherversion mit 3-stelliger Serverversion 8ms (8ms|0ms)
+   [+] 4-stellige Launcherversion mit 2-stelliger Serverversion 8ms (7ms|0ms)
+   [+] 4-stellige Launcherversion mit 1-stelliger Serverversion 8ms (7ms|0ms)
+ Describing KEIN Match für Launcherversion, wenn höheres Client-Release vom Server
+  Die Version 2.2.3.4 ist spezifischer als 1
+   [+] 1-stellige Launcherversion mit 4-stelliger Serverversion 10ms (9ms|1ms)
+  Die Version 2.2.3 ist spezifischer als 1
+   [+] 1-stellige Launcherversion mit 3-stelliger Serverversion 9ms (8ms|0ms)
+  Die Version 2.2 ist spezifischer als 1
+   [+] 1-stellige Launcherversion mit 2-stelliger Serverversion 11ms (11ms|0ms)
+   [+] 1-stellige Launcherversion mit 1-stelliger Serverversion 13ms (12ms|1ms)
+  Die Version 1.2.3.4 ist spezifischer als 1
+   [+] 1-stellige Launcherversion mit 4-stelliger Serverversion 10ms (9ms|0ms)
+  Die Version 1.2.3 ist spezifischer als 1
+   [+] 1-stellige Launcherversion mit 3-stelliger Serverversion 9ms (8ms|0ms)
+  Die Version 1.2 ist spezifischer als 1
+   [+] 1-stellige Launcherversion mit 2-stelliger Serverversion 9ms (9ms|0ms)
+  Die Version 2.2.3.4 ist spezifischer als 1.2
+   [+] 2-stellige Launcherversion mit 4-stelliger Serverversion 9ms (9ms|0ms)
+  Die Version 2.2.3 ist spezifischer als 1.2
+   [+] 2-stellige Launcherversion mit 3-stelliger Serverversion 11ms (10ms|0ms)
+   [+] 2-stellige Launcherversion mit 2-stelliger Serverversion 10ms (10ms|0ms)
+   [+] 2-stellige Launcherversion mit 1-stelliger Serverversion 9ms (8ms|0ms)
+  Die Version 1.2.3.4 ist spezifischer als 1.2
+   [+] 2-stellige Launcherversion mit 4-stelliger Serverversion 11ms (11ms|1ms)
+  Die Version 1.2.3 ist spezifischer als 1.2
+   [+] 2-stellige Launcherversion mit 4-stelliger Serverversion 10ms (9ms|0ms)
+  Die Version 2.2.3.4 ist spezifischer als 1.2.3
+   [+] 3-stellige Launcherversion mit 4-stelliger Serverversion 8ms (8ms|0ms)
+   [+] 3-stellige Launcherversion mit 3-stelliger Serverversion 8ms (8ms|0ms)
+   [+] 3-stellige Launcherversion mit 2-stelliger Serverversion 8ms (7ms|0ms)
+   [+] 3-stellige Launcherversion mit 1-stelliger Serverversion 8ms (8ms|0ms)
+  Die Version 1.2.3.4 ist spezifischer als 1.2.3
+   [+] 3-stellige Launcherversion mit 4-stelliger Serverversion 8ms (8ms|0ms)
+   [+] 4-stellige Launcherversion mit 4-stelliger Serverversion 8ms (8ms|0ms)
+   [+] 4-stellige Launcherversion mit 3-stelliger Serverversion 12ms (11ms|0ms)
+   [+] 4-stellige Launcherversion mit 2-stelliger Serverversion 9ms (9ms|0ms)
+   [+] 4-stellige Launcherversion mit 1-stelliger Serverversion 9ms (8ms|0ms)
+   [+] 4-stellige Launcherversion mit 4-stelliger Serverversion 9ms (9ms|0ms)
+   [+] 4-stellige Launcherversion mit 3-stelliger Serverversion 9ms (9ms|1ms)
+   [+] 4-stellige Launcherversion mit 2-stelliger Serverversion 8ms (7ms|0ms)
+   [+] 4-stellige Launcherversion mit 4-stelliger Serverversion 9ms (8ms|0ms)
+   [+] 4-stellige Launcherversion mit 3-stelliger Serverversion 7ms (7ms|0ms)
+   [+] 4-stellige Launcherversion mit 4-stelliger Serverversion 8ms (7ms|0ms)
+ Describing KEIN Match für Launcherversion, wenn niedrigeres Client-Release vom Server
+  Die Version 1.2.3.4 ist spezifischer als 2
+   [+] 1-stellige Launcherversion mit 4-stelliger Serverversion 9ms (8ms|1ms)
+  Die Version 1.2.3 ist spezifischer als 2
+   [+] 1-stellige Launcherversion mit 3-stelliger Serverversion 8ms (7ms|0ms)
+  Die Version 1.2 ist spezifischer als 2
+   [+] 1-stellige Launcherversion mit 2-stelliger Serverversion 7ms (7ms|0ms)
+   [+] 1-stellige Launcherversion mit 1-stelliger Serverversion 7ms (7ms|0ms)
+  Die Version 1.2.3.4 ist spezifischer als 2.2
+   [+] 2-stellige Launcherversion mit 4-stelliger Serverversion 7ms (7ms|0ms)
+  Die Version 1.2.3 ist spezifischer als 2.2
+   [+] 2-stellige Launcherversion mit 3-stelliger Serverversion 8ms (7ms|0ms)
+   [+] 2-stellige Launcherversion mit 2-stelliger Serverversion 7ms (7ms|0ms)
+   [+] 2-stellige Launcherversion mit 1-stelliger Serverversion 7ms (7ms|0ms)
+  Die Version 1.2.3.4 ist spezifischer als 2.2.3
+   [+] 3-stellige Launcherversion mit 4-stelliger Serverversion 11ms (11ms|0ms)
+   [+] 3-stellige Launcherversion mit 3-stelliger Serverversion 9ms (9ms|0ms)
+   [+] 3-stellige Launcherversion mit 2-stelliger Serverversion 25ms (9ms|16ms)
+   [+] 3-stellige Launcherversion mit 1-stelliger Serverversion 8ms (7ms|0ms)
+   [+] 4-stellige Launcherversion mit 4-stelliger Serverversion 8ms (7ms|0ms)
+   [+] 4-stellige Launcherversion mit 3-stelliger Serverversion 8ms (7ms|0ms)
+   [+] 4-stellige Launcherversion mit 2-stelliger Serverversion 7ms (7ms|0ms)
+   [+] 4-stellige Launcherversion mit 1-stelliger Serverversion 9ms (8ms|0ms)
+ Describing Match für Launcherversion, wenn mehreren Client-Releases vom Server
+   [+] 3-stellige Launcherversion mit 3- und 4-stelligen Serverversionen 8ms (8ms|1ms)
+   [+] 4-stellige Launcherversion mit 3- und 4-stelligen Serverversionen 7ms (7ms|0ms)
+ Describing KEIN Match für Launcherversion, wenn mehreren Client-Releases vom Server
+  Die Version 2.3.1.0 ist spezifischer als 1.2.3
+   [+] 3-stellige Launcherversion mit 3- und 4-stelligen Serverversionen 10ms (9ms|1ms)
+   [+] 4-stellige Launcherversion mit 3- und 4-stelligen Serverversionen 7ms (7ms|0ms)
+Tests completed in 2.99s
+Tests Passed: 78, Failed: 0, Skipped: 0, Inconclusive: 0, NotRun: 0
+----
