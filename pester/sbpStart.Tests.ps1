@@ -13,8 +13,7 @@ BeforeAll {
     $script:TEMP_DIR = [System.IO.Path]::GetTempPath()
     $script:LAUNCHER_ROOT_DIR = $null
 
-    function New-LauncherDir
-    {
+    function New-LauncherDir {
         [OutputType([System.IO.Path])]
         param (
             [Parameter(Mandatory = $true)][string]$Version
@@ -201,8 +200,7 @@ Describe "Ergebnis 'less', 'greater' und 'equal' der 'Compare'-Funktion als Grun
                 $launcherVersions = Get-LauncherDirectories -Path $script:LAUNCHER_ROOT_DIR
                 $launcherVersions.Count | Should -Be 3
                 $sortedLauncherVersions = New-Object Collections.Generic.List[System.IO.DirectoryInfo]
-                foreach ($item in $launcherVersions)
-                {
+                foreach ($item in $launcherVersions) {
                     $sortedLauncherVersions.Add($item)
                 }
                 $sortedLauncherVersions.Sort($comparer)
@@ -229,8 +227,7 @@ Describe "Ergebnis 'less', 'greater' und 'equal' der 'Compare'-Funktion als Grun
                 $launcherVersions = Get-LauncherDirectories -Path $script:LAUNCHER_ROOT_DIR
                 $launcherVersions.Count | Should -Be 3
                 $sortedLauncherVersions = New-Object Collections.Generic.List[System.IO.DirectoryInfo]
-                foreach ($item in $launcherVersions)
-                {
+                foreach ($item in $launcherVersions) {
                     $sortedLauncherVersions.Add($item)
                 }
                 $sortedLauncherVersions.Sort($comparer)
@@ -258,8 +255,7 @@ Describe "Ergebnis 'less', 'greater' und 'equal' der 'Compare'-Funktion als Grun
                 $launcherVersions = Get-LauncherDirectories -Path $script:LAUNCHER_ROOT_DIR
                 $launcherVersions.Count | Should -Be 4
                 $sortedLauncherVersions = New-Object Collections.Generic.List[System.IO.DirectoryInfo]
-                foreach ($item in $launcherVersions)
-                {
+                foreach ($item in $launcherVersions) {
                     $sortedLauncherVersions.Add($item)
                 }
                 $sortedLauncherVersions.Sort($comparer)
@@ -471,6 +467,54 @@ Describe "Ergebnis 'less', 'greater' und 'equal' der 'Compare'-Funktion als Grun
         }
         It "4-stellige Launcherversion mit 3- und 4-stelligen Serverversionen" {
             Test-SupportedVersion -Version '1.2.3.4' -SupportedVersions @('3.2.1', '2.3.1.0') | Should -Be $false
+        }
+    }
+
+    Describe 'Laufendes Skript ändern' {
+        BeforeEach {
+            $fileName = 'testScript.ps1'
+            $filePath = [System.IO.Path]::Combine($TEMP_DIR, $fileName)
+            $script:scriptToRun = New-Item -Path $filePath -ItemType File -Force -ErrorAction Ignore
+        }
+
+        It 'Skript löscht sich bei Ausführung selbst' {
+            $scriptContent = @'
+            Write-Output "Löscht sich selbst"
+            Remove-Item $PSCommandPath -Force
+'@
+            Set-Content -Path $scriptToRun -Value $scriptContent
+            # Führe Skript aus
+            $output = & $scriptToRun
+            # Teste, ob Skript ausgeführt wurde und sich durch den Aufruf selbst gelöscht hat
+            $output | Should -Be "Löscht sich selbst"
+            Test-Path -Path $scriptToRun | Should -Be $false
+        }
+
+        It 'Im Hintergrund laufendes Skript wird überschrieben' {
+            $scriptContent = @'
+            Start-Sleep -Seconds 2
+            Write-Output "Alter Inhalt"
+'@
+            Set-Content -Path $scriptToRun -Value $scriptContent
+            # Führe Skript aus; Skript wartet 2 Sek. im Hintergrund
+            $job = Start-Job -FilePath $scriptToRun
+            # Überschreibe "wartendes" Skript
+            $scriptContent = 'Write-Output "Neuer Inhalt"'
+            Set-Content -Path $scriptToRun -Value $scriptContent
+            # Teste durch Aufruf, ob Skript überschrieben wurde
+            $output = & $scriptToRun
+            $output | Should -Be "Neuer Inhalt"
+            # Warte auf Ende des Hintergund-Skripts
+            Wait-Job -Id $job.Id
+            # Teste, ob es sich wirklich um das Skript aus dem Hintergrund handelt
+            $output = Receive-Job -Id $job.Id
+            $output | Should -Be "Alter Inhalt"
+        }
+
+        AfterEach {
+            if ( Test-Path -Path $scriptToRun) {
+                Remove-Item $scriptToRun -Force
+            }
         }
     }
 }
